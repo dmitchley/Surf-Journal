@@ -34,7 +34,7 @@ To manage your journals see the dropdown and select manage account where you wil
 
   <img src="./frontend/src/images/readme-accountpage.PNG" width="800">
 
-How to install and Test on your local computer
+## How to install and Test on your local computer
 
 - Run git clone https://github.com/dmitchley/Surf-Journal.git
 
