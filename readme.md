@@ -71,3 +71,8 @@ I could not unfortunately get a proper api endpoint for the surf report data. I 
 I originally planned to deploy the app to Heroku however they do not have a free tier anymore so I used render.com for the backend and vercel.com for the frontend. Render apparently offers options to deploy a frontend application however I am more accustomed to using vercel so I chose them instead.
 
 - Link to the application
+
+## Planning Files
+
+<img src="./frontend/src/images/wireframes.pdf" width="800">
+
