@@ -74,5 +74,7 @@ I originally planned to deploy the app to Heroku however they do not have a free
 
 ## Planning Files
 
-<img src="./frontend/src/images/wireframes.pdf" width="800">
+ 
+
+<embed src="./frontend/src/images/wireframes.pdf" width="500" height="375">
 
