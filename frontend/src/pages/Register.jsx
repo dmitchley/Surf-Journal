@@ -29,7 +29,7 @@ export default function Register() {
 
     axios
       .post(
-        "https://surfjournalbackend.onrender.com/api/user/register",
+        "https://surf-journal-backend.onrender.com/api/user/register",
         loginPayload
       )
       .then((response) => {
