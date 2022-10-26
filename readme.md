@@ -2,6 +2,8 @@
 
 This application is a way for **Surfers** to form patterns of when surf spots have optimum conditions. They can browse through the journals tab of their desired surf spot and get an idea of how the upcoming report will relate to what the Journals say. This is a way to get local knowledge without knowing the locals. The surf report information is web scraped from the magicseaweed.com website. I wanted to marry www.wannasurf.com and surfline.com. I see a gap in the market where surfers can get better forecasting with the marriage of human feedback (Journals) and digital forecasting (MagicSeaweed Report).
 
+Link to Live Project [Surf Journal](https://surf-journal.vercel.app/).
+
 # How to use the App
 
 The first page you will land on is the login page. If you do not have an account please visit the registration page.
@@ -70,7 +72,7 @@ I could not unfortunately get a proper api endpoint for the surf report data. I 
 
 I originally planned to deploy the app to Heroku however they do not have a free tier anymore so I used render.com for the backend and vercel.com for the frontend. Render apparently offers options to deploy a frontend application however I am more accustomed to using vercel so I chose them instead.
 
-- Link to the application
+- Link to Live Project [Surf Journal](https://surf-journal.vercel.app/).
 
 ## Planning Files
 
