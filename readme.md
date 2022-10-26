@@ -74,7 +74,10 @@ I originally planned to deploy the app to Heroku however they do not have a free
 
 ## Planning Files
 
- 
 
-<embed src="./frontend/src/images/wireframes.pdf" width="500" height="375">
+<a href="./frontend/src/images/wireframes.pdf" download>Click to Download Wireframes</a>
+
+<a href="./frontend/src/images/plans.text" download>Click to Download App Idea Writeup</a>
+
+ 
 
