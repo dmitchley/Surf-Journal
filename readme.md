@@ -9,9 +9,12 @@ Link to Live Project [Surf Journal](https://surf-journal.vercel.app/).
 The first page you will land on is the login page. If you do not have an account please visit the registration page.
 
 ### Admin Login Details
+
  > fullname: Admin
- > email : admin@surfjournal.co.za
- > password: qwerty12345
+
+> email : admin@surfjournal.co.za
+
+> password: qwerty12345
 
 You will then land on the home page. You can then select a spot on the sidebar menu.
 
