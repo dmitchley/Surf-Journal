@@ -30,7 +30,7 @@ export default function Signin() {
 
     axios
       .post(
-        "https://surfjournalbackend.onrender.com/api/user/login",
+        "https://surf-journal-backend.onrender.com/api/user/login",
         loginPayload
       )
       .then((response) => {

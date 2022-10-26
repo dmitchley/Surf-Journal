@@ -11,7 +11,7 @@ function KoelBayTable() {
 
   const getData = async () => {
     await axios
-      .get("http://localhost:5000/api/spots/koelbay")
+      .get("https://surf-journal-backend.onrender.com/api/spots/koelbay")
       .then(function (response) {
         setdayOne(response.data[0][0].splice(0, 8));
         setdayTwo(response.data[0][0].splice(8, 8));
