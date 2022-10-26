@@ -1,0 +1,74 @@
+System Architecture
+
+I am planning to use the MENN stack to develop this project with Tailwind CSS to do the styling. I am using Tailwind because it's very modern and easy to customize the look and easy to configure. I am using Next instead of React because it will help my project rank better on Google so I think that will help in the long run. I am using the Render Cloud Service because Heroku's free tier is ending in November and Render is free forever. I think the tools I have chosen are simple enough for me to create this project but also great because they power so many apps around the world.
+
+MENN STACK
+
+- Mongo DB (Database)
+- Express JS
+- Next JS
+- Node JS
+
+CSS STYLING
+
+- Tailwind
+
+DEPLOYMENT
+
+- Render Cloud Service (https://render.com/)
+
+System Requirements Specification
+
+The app will be called Surf Journal Beta. The application is a way for surfers to form patterns of when surf spots have optimum conditions. They can browse through the journals tab of their desired surf spot and get an idea of how the upcoming report will relate to what the Journals say. This is a way to get local knowledge without knowing the locals. The app will give a 6-day surf report of 5 different surfing spots from around the world. The surf report information will be gathered from the surfline.com API and each journal will be saved to the mongo database. The app will have an admin user that can delete Journals as well as users. The app will have CRUD functionality. Multiple users will be able to give their feedback on each Journal as well as upload photos.
+
+How will this app fit into the surfing marketplace?
+
+WANNASURF.COM
+
+- I love the insights on particular surf spots you get from wannasurf as well as the community aspect where users give their thoughts on when a surfing spot will have optimum conditions.
+
+SURFLINE.COM
+
+- It's the best place to get a five-day surf report.
+
+I wanted to marry www.wannasurf.com and surfline.com. I see a gap in the market where surfers can get better forecasting with the marriage of human feedback (Journals) and digital forecasting (Surfline Report). I plan to make the service free initially however in the future once I have a solid user base I can then do upgrades to the site incorporating a payment plan where users can get digital feedback from local surf guides and longer forecasting.
+
+NON-FUNCTIONAL REQUIREMENTS
+
+I am using the acronym called FURPS to help describe the NON-FUNCTIONAL REQUIREMENTS.
+
+- Usability
+
+The Usability of this task Surf Journal Beta app is important as the market has many competitors which have amazing user experiences.
+
+- Reliability
+
+Reliability is key as this app is providing a very important job by helping surfers get an accurate report and plan their surf reports properly.
+
+- Performance
+
+Without decent Performance, users will not use the app and find another solution.
+
+- Security
+
+Without Security, users will move to another surf forecasting app.
+
+FUNCTIONAL REQUIREMENTS
+
+Basic Functions from the Signup Stage
+
+- User must be able to make a profile on the Surf Journal Beta app with a unique username.
+
+Admin Functions
+
+- The admin must be able to remove users and Journals from the app.
+
+User Functions
+
+- The user must be able to see the upcoming 5-day surf report for 5 different spots.
+
+- The user must be able to select a particular 3-hour time window on a specific day and add it as a journal that includes images and comments on the conditions of that time.
+
+- The user must be able to comment on other people's Journals.
+
+- The user must be able to search through all journals added to the different spots.
