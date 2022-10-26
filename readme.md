@@ -6,7 +6,7 @@ This application is a way for **Surfers** to form patterns of when surf spots ha
 
 The first page you will land on is the login page. If you do not have an account please visit the registration page.
 
-![Login Page](./frontend/src/images/readme-login.PNG =100x20 "Login Page")
+ 
 
 You will then land on the home page. You can then select a spot on the sidebar menu.
 
