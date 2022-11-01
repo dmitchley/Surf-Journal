@@ -6,8 +6,6 @@
   "scripts": {
     "start": "node ./backend/server",
     "server": "nodemon ./backend/server",
-    
-   
     "test": "jest ./test/koelbay.test.js"
   },
   "author": "Dylan Mitchley",
