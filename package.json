@@ -4,11 +4,12 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "start": "node ./backend/server",
     "server": "nodemon ./backend/server",
     "installBackend": "npm install",
     "installFrontend": "npm install ./frontend",
     "client": "npm run front --prefix frontend",
-    "start": "npm run installFrontend && npm run installBackend && concurrently  \"npm run server\" \"npm run client\"",
+   
     "test": "jest ./test/koelbay.test.js"
   },
   "author": "Dylan Mitchley",
