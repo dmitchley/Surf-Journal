@@ -6,9 +6,7 @@
   "scripts": {
     "start": "node ./backend/server",
     "server": "nodemon ./backend/server",
-    "installBackend": "npm install",
-    "installFrontend": "npm install ./frontend",
-    "client": "npm run front --prefix frontend",
+    
    
     "test": "jest ./test/koelbay.test.js"
   },
