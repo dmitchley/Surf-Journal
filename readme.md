@@ -2,11 +2,25 @@
 
 This application is a way for **Surfers** to form patterns of when surf spots have optimum conditions. They can browse through the journals tab of their desired surf spot and get an idea of how the upcoming report will relate to what the Journals say. This is a way to get local knowledge without knowing the locals. The surf report information is web scraped from the magicseaweed.com website. I wanted to marry www.wannasurf.com and surfline.com. I see a gap in the market where surfers can get better forecasting with the marriage of human feedback (Journals) and digital forecasting (MagicSeaweed Report).
 
+# Run App Locally and admin Details
+
+> Run `npm start` in the root directory to install all dependencies and start the app.
+
+### Admin Login Details
+
+> `fullname`: `Admin`
+
+> `email`: `admin@surfjournal.co.za`
+
+> `password`: `qwerty12345`
+
+### Link to the live website
+
+<a href="https://surf-journal.vercel.app/">Link to Surf Journal</a>
+
 # How to use the App
 
 The first page you will land on is the login page. If you do not have an account please visit the registration page.
-
-![Login Page](./frontend/src/images/readme-login.PNG =100x20 "Login Page")
 
 You will then land on the home page. You can then select a spot on the sidebar menu.
 
