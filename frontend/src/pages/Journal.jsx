@@ -9,12 +9,12 @@ function Journal() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [journals, setjournal] = useState([]);
 
-  const url = "https://surf-journal-backend.onrender.com/api/journal";
+  const url = "http://localhost:5000/api/journal";
 
   // get all journals
   const getJournals = () => {
     axios
-      .get("https://surf-journal-backend.onrender.com/api/journals")
+      .get("http://localhost:5000/api/journals")
       .then((response) => {
         setjournal(response.data.journals);
       })

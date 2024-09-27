@@ -11,7 +11,7 @@ function BikiniBeachTable() {
 
   const getData = async () => {
     await axios
-      .get("https://surf-journal-backend.onrender.com/api/spots/bikinibeach")
+      .get("http://localhost:5000/api/spots/bikinibeach")
       .then(function (response) {
         setdayOne(response.data[0][0].splice(0, 8));
         setdayTwo(response.data[0][0].splice(8, 8));

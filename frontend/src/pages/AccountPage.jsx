@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
+import ModalPasswordForm from "../components/ModelPasswordForm";
 
 import axios from "axios";
 
@@ -13,12 +14,17 @@ export default function JournalDetail() {
   const [userlist, setuserlist] = useState([]);
   const [JournalList, setJournalList] = useState([]);
   const [personalJournal, setpersonalJournal] = useState([]);
+  const [open, setOpen] = useState(false);
+
+  const openForm = () => {
+    setOpen(true);
+  };
 
   // personal data for each user to display in table
 
   const getPersonalData = async () => {
     await axios
-      .get("https://surf-journal-backend.onrender.com/api/user/me", {
+      .get("http://localhost:5000/api/user/me", {
         // get the token from local storage and authorize the user with the token
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -38,15 +44,12 @@ export default function JournalDetail() {
 
   const getPersonalJournals = async () => {
     await axios
-      .get(
-        "https://surf-journal-backend.onrender.com/api/journals/myJournals",
-        {
-          // get the token from local storage and authorize the user with the token
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      )
+      .get("http://localhost:5000/api/journals/myJournals", {
+        // get the token from local storage and authorize the user with the token
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
       .then(function (response) {
         setpersonalJournal(response.data.foundJournals);
       })
@@ -61,7 +64,7 @@ export default function JournalDetail() {
 
   const getUsers = async () => {
     await axios
-      .get("https://surf-journal-backend.onrender.com/api/user/", {
+      .get("http://localhost:5000/api/user/", {
         // get the token from local storage and authorize the user with the token
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -89,7 +92,7 @@ export default function JournalDetail() {
 
   const getAllJournals = async () => {
     await axios
-      .get("https://surf-journal-backend.onrender.com/api/journals", {
+      .get("http://localhost:5000/api/journals", {
         // get the token from local storage and authorize the user with the token
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -109,8 +112,34 @@ export default function JournalDetail() {
 
   const DeleteUser = (User) => {
     axios
-      .delete(`https://surf-journal-backend.onrender.com/api/user/${User}`, {
+      .delete(`http://localhost:5000/user/${User}`, {
         // get the token from local storage and authorize the user with the token
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((response) => console.log(response))
+      .then(setuserlist(userlist))
+
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      });
+
+    setTimeout(PageReload, 1000);
+
+    function PageReload() {
+      window.location.reload();
+    }
+  };
+
+  // delete journal function
+
+  const DeleteJournal = (Journal) => {
+    axios
+      .delete(`http://localhost:5000/api/journals/${Journal}`, {
+        // get the token from local storage and authorize the user with the token
+        //https://surf-journal-backend.onrender.com/
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -120,28 +149,11 @@ export default function JournalDetail() {
         // handle error
         console.log(error);
       });
-    window.location.reload();
-  };
+    setTimeout(PageReload, 1000);
 
-  // delete journal function
-
-  const DeleteJournal = (Journal) => {
-    axios
-      .delete(
-        `https://surf-journal-backend.onrender.com/api/journals/${Journal}`,
-        {
-          // get the token from local storage and authorize the user with the token
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      )
-
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      });
-    window.location.reload();
+    function PageReload() {
+      window.location.reload();
+    }
   };
 
   useEffect(
@@ -224,7 +236,13 @@ export default function JournalDetail() {
                     Password
                   </dt>
                   <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                    {personalData.password}
+                    {personalData.password}{" "}
+                    <button
+                      onClick={openForm}
+                      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded float-right"
+                    >
+                      Update Password
+                    </button>
                   </dd>
                 </div>
                 <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -239,10 +257,16 @@ export default function JournalDetail() {
         </main>
         {/* delete users here */}
         {/* userlist */}
+
+        <ModalPasswordForm
+          open={open}
+          setOpen={setOpen}
+          personalData={personalData.id}
+        />
+
         {personalData.role === "Admin" ? (
           <main className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto bg-white mt-6">
             {personalData.role === "Admin" ? <AdminHeader /> : <></>}
-
             {userlist.length ? (
               userlist.map((user) => {
                 return (
@@ -277,6 +301,7 @@ export default function JournalDetail() {
         ) : (
           <></>
         )}
+
         {/* delete users here */}
         {/* journals here */}
         {personalData.role === "Admin" ? (

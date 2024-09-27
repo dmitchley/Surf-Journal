@@ -1,45 +1,37 @@
 import { Fragment, useRef, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import FileBase64 from "react-file-base64";
+
 import axios from "axios";
 
-export default function ModalForm({ open, setOpen, journal }) {
+export default function ModalForm({ open, setOpen, personalData }) {
   const cancelButtonRef = useRef(null);
-  const [journalNotes, setjournalNotes] = useState([]);
-  const [journalImage, setjournalImage] = useState("");
+  const [NewPassword, setNewPassword] = useState([]);
+
   const [loading, setloading] = useState(false);
 
-  const SubmitJournal = (event) => {
-    event.preventDefault(); // 👈️ prevent page refresh
+  // update password
 
-    // payload from particular tr that hold surf journal information plus the image and notes you add
+  const UpdatePassword = (event) => {
+    event.preventDefault();
 
     const Payload = {
-      text: journalNotes,
-      time: journal.time,
-      wave: journal.wave,
-      image: journalImage.image,
-      waveDirection: journal.waveDirection,
-      windDirection: journal.windDirection,
-      location: journal.location,
+      password: NewPassword,
     };
 
-    console.log("Notes 👉️", Payload);
-
     axios
-      .post("http://localhost:5000/api/journals", Payload)
-      .then((response) => {
-        console.log(response.data), (window.location.href = "/journal");
-      })
-      .catch(function (err) {
-        console.log(err), setErrorBanner(true), alert("File Upload Error");
-      });
-    showLoader();
-  };
+      .put(`http://localhost:5000/api/user/${personalData}`, Payload)
 
-  function showLoader() {
-    setloading(true);
-  }
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      });
+
+    setTimeout(PageReload, 1000);
+
+    function PageReload() {
+      window.location.reload();
+    }
+  };
 
   const LoadingBar = () => {
     return (
@@ -101,27 +93,11 @@ export default function ModalForm({ open, setOpen, journal }) {
                     <div className="mt-3   ">
                       <div className="text-center">
                         {loading == true ? <LoadingBar /> : <></>}
-                        <h3>
-                          <b>Height:</b>
-                          {journal.wave}
-                        </h3>
-
-                        <h3>
-                          <b>Time:</b> {journal.time}
-                        </h3>
-
-                        <h3>
-                          <b> Wave Direction:</b> {journal.waveDirection}
-                        </h3>
-
-                        <h3>
-                          <b>Wind Direction:</b> {journal.windDirection}
-                        </h3>
                       </div>
                       <div>
                         <form
                           className="mt-8 space-y-6"
-                          onSubmit={SubmitJournal}
+                          onSubmit={UpdatePassword}
                         >
                           <div>
                             <label htmlFor="name" className="sr-only">
@@ -133,29 +109,20 @@ export default function ModalForm({ open, setOpen, journal }) {
                               type="textarea "
                               autoComplete="name"
                               onChange={(event) =>
-                                setjournalNotes(event.target.value)
+                                setNewPassword(event.target.value)
                               }
-                              value={journalNotes}
+                              value={NewPassword}
                               className="relative block w-full appearance-none rounded-none rounded-t-md rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                               placeholder="Journal Notes"
                             />
                           </div>
                           <div className="bg-gray-50 px-4 py-3 sm:flex   sm:px-6 my-4">
                             <button
-                              type="file"
+                              type="submit"
                               className="mr-5 w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus: focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
                             >
                               Submit
                             </button>
-                            <div className="mt-1">
-                              <FileBase64
-                                type="file"
-                                multiple={false}
-                                onDone={({ base64 }) =>
-                                  setjournalImage({ image: base64 })
-                                }
-                              />
-                            </div>
                           </div>
                         </form>
                       </div>

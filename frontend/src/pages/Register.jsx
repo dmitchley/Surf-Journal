@@ -28,10 +28,7 @@ export default function Register() {
     };
 
     axios
-      .post(
-        "https://surf-journal-backend.onrender.com/api/user/register",
-        loginPayload
-      )
+      .post("http://localhost:5000/api/user/register", loginPayload)
       .then((response) => {
         //get token from response
         const token = response.data.token;

@@ -6,6 +6,7 @@ const {
   loginUser,
   getMe,
   deleteUser,
+  updateUserPassword,
 } = require("../controllers/userController");
 // only see your personal items middleware
 const { protect } = require("../middleware/authMiddleware");
@@ -18,6 +19,9 @@ router.get("/", protectAdmin, getUsers);
 // see your personal data
 
 router.get("/me", protect, getMe);
+
+// update password
+router.put("/:id", updateUserPassword);
 
 // register route
 

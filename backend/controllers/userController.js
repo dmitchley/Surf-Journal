@@ -115,10 +115,30 @@ const getMe = asyncHandler(async (req, res) => {
   });
 });
 
+// @access  Private
+const updateUserPassword = asyncHandler(async (req, res) => {
+  const updatedPassword = await User.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    {
+      new: true,
+    }
+  );
+
+  res.status(200).json(updatedPassword);
+});
+
 // generate token jwt
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
 };
 
-module.exports = { getUsers, createUser, loginUser, getMe, deleteUser };
+module.exports = {
+  getUsers,
+  createUser,
+  loginUser,
+  getMe,
+  deleteUser,
+  updateUserPassword,
+};

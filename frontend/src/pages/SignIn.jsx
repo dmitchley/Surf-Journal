@@ -29,10 +29,7 @@ export default function Signin() {
     };
 
     axios
-      .post(
-        "https://surf-journal-backend.onrender.com/api/user/login",
-        loginPayload
-      )
+      .post("http://localhost:5000/api/user/login", loginPayload)
       .then((response) => {
         //get token from response
         const token = response.data.token;
