@@ -28,7 +28,9 @@
     "frontend": "file:frontend",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.6.3",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "puppeteer": "^23.4.1",
+    "redis": "^4.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.19.6",
