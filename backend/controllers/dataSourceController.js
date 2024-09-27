@@ -2,13 +2,32 @@ const asyncHandler = require("express-async-handler");
 const express = require("express");
 const axios = require("axios");
 const cheerio = require("cheerio");
+
 const redis = require("redis");
+
+const client = redis.createClient({
+  password: process.env.REDIS_PASSWORD,
+  socket: {
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT,
+  },
+});
+
+client.connect().catch(console.error);
 
 const SURFLINE_API_URL =
   "https://services.surfline.com/kbyg/spots/forecasts/swells";
 
 const getkoelbay = async (req, res) => {
+  const cacheKey = "koelbay_swells";
+
   try {
+    const cachedData = await client.get(cacheKey);
+    if (cachedData) {
+      console.log("Returning cached data");
+      return res.json(JSON.parse(cachedData));
+    }
+
     const { data } = await axios.get(SURFLINE_API_URL, {
       params: {
         cacheEnabled: true,
@@ -36,7 +55,11 @@ const getkoelbay = async (req, res) => {
         swellPeriod: swellEntry.swells.map((swell) => swell.period),
       };
     });
-    //  console.log(mappedSwells);
+
+    await client.set(cacheKey, JSON.stringify(mappedSwells), {
+      EX: 3600,
+    });
+
     res.json(mappedSwells);
   } catch (error) {
     console.error("Error fetching data from Surfline API:", error.message);
