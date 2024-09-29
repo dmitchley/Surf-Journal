@@ -1,5 +1,6 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { JWT } from 'next-auth/jwt';
 
 export default NextAuth({
   providers: [
@@ -9,7 +10,10 @@ export default NextAuth({
         email: { label: 'Email', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials) {
+      async authorize(credentials: { email: string; password: string } | undefined) {
+        if (!credentials) {
+          return null;
+        }
         const res = await fetch('http://localhost:5000/api/user/login', {
           method: 'POST',
           body: JSON.stringify({
@@ -28,23 +32,22 @@ export default NextAuth({
       },
     }),
   ],
-  session: {
-    jwt: true,  // Enables JWT session
-  },
   jwt: {
-    secret: process.env.JWT_SECRET,  // Define a JWT secret key
+    secret: process.env.JWT_SECRET,
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: JWT; user?: any }) {
       if (user) {
         token.id = user.id;
         token.email = user.email;
       }
       return token;
     },
-    async session({ session, token }) {
-      session.user.id = token.id;
-      session.user.email = token.email;
+    async session({ session, token }: { session: any; token: JWT }) {
+      if (session.user) {
+        session.user.id = token.id ?? "";
+        session.user.email = token.email ?? "";
+      }
       return session;
     },
   },

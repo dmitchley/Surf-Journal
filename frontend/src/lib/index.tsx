@@ -5,8 +5,9 @@ import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 
 
-const withAuth = (WrappedComponent: React.ComponentType) => {
-  const Auth = (props: JSX.IntrinsicAttributes) => {
+
+const withAuth = (WrappedComponent: any) => {
+  const Auth = (props: any) => {
     const { data: session, status } = useSession();
 
     const router = useRouter();

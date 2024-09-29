@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import withAuth from '@/lib/index';
 
-const createJournalEntry = async (journalData) => {
+const createJournalEntry = async (journalData: {
+  text: string; time: string; wave: { height: any; unit: string; }; wave_direction: any; wind_direction: string; // Assuming this is static, adjust if needed
+  location: { latitude: number; longitude: number; name: string; }; user_id: any;
+}) => {
 
   // console.log(journalData)
 
@@ -43,8 +46,15 @@ const groupDataByDay = (data: any[]) => {
   }, {} as Record<string, any[]>);
 };
 
-// Modal Component for Journal Submission
-const JournalModal = ({ showModal, setShowModal, rowData, userId }) => {
+
+interface JournalModalProps {
+  showModal: boolean;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  rowData: any;
+  userId: string;
+}
+
+const JournalModal: React.FC<JournalModalProps> = ({ showModal, setShowModal, rowData, userId }) => {
   const [text, setText] = useState('');
   const [message, setMessage] = useState('');
 
@@ -74,7 +84,7 @@ const JournalModal = ({ showModal, setShowModal, rowData, userId }) => {
 
   // console.log(image)
 
-  const handleImageChange = (e) => {
+  const handleImageChange = (e: any) => {
     setImage(e.target.files[0]);
   };
 
@@ -125,11 +135,11 @@ const JournalModal = ({ showModal, setShowModal, rowData, userId }) => {
 };
 
 // Table component to display grouped data with Journal button per row
-const DayTable = ({ day, data, userId }: { day: string; data: any[]; userId: string }) => {
+const DayTable = ({ day, data, userId }: { day: string; data: any; userId: string }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
 
-  const handleJournalClick = (row) => {
+  const handleJournalClick = (row: React.SetStateAction<null>) => {
     setSelectedRowData(row);
     setShowModal(true);
   };
@@ -160,7 +170,7 @@ const DayTable = ({ day, data, userId }: { day: string; data: any[]; userId: str
             </tr>
           </thead>
           <tbody>
-            {data.map((row, index) => (
+            {data.map((row: any, index: any | null | undefined) => (
               <tr key={index}>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {new Date(row.timestamp * 1000).toLocaleString('en-US', {
@@ -200,7 +210,11 @@ const DayTable = ({ day, data, userId }: { day: string; data: any[]; userId: str
   );
 };
 
-const KoelBayPage = ({ data }: { data: any[] }) => {
+interface KoelBayPageProps {
+  data: any[];
+}
+
+const KoelBayPage: React.FC<KoelBayPageProps> = ({ data }: { data: any[] }) => {
   const { data: session } = useSession();
   const userId = session?.user?.id || '';
 
@@ -235,3 +249,5 @@ export const getServerSideProps = async () => {
 };
 
 export default withAuth(KoelBayPage);
+
+
