@@ -3,12 +3,26 @@ import { db } from '../db';
 import { Journal } from '../models/journal';
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
-import cron from 'node-cron';
+import redis, { createClient } from 'redis';
 
 const generateToken = (id: number) => {
   return jwt.sign({ id }, process.env.JWT_SECRET!, { expiresIn: '30d' });
 };
 
+// Redis Client Setup
+const client = createClient({
+  password: process.env.REDIS_PASSWORD,
+  socket: {
+    host: process.env.REDIS_HOST,
+    port: Number(process.env.REDIS_PORT),
+  },
+});
+
+
+
+client.connect().catch((err) => {
+  console.error("Failed to connect to Redis", err);
+});
 
 export const createJournal = async (req: Request, res: Response): Promise<void> => {
   const { text, time, wave, wave_direction, wind_direction, location, user_id }: Journal = req.body;
@@ -135,12 +149,28 @@ export const addCommentToJournal = async (req: Request, res: Response): Promise<
 
 
 export const getAllJournals = async (req: Request, res: Response): Promise<void> => {
+  const cacheKey = "all_journals";
+
   try {
+
+    const cachedData = await client.get(cacheKey);
+    if (cachedData) {
+      console.log("Returning cached data");
+      res.json(JSON.parse(cachedData));
+      return;
+    }
+
+
     const query = `
       SELECT id, text, time, wave, wave_direction, wind_direction, location, user_id
       FROM journal;
     `;
     const result = await db.query(query);
+
+
+    await client.set(cacheKey, JSON.stringify(result.rows), {
+      EX: 3600,
+    });
 
     if (result.rows.length > 0) {
       res.status(200).json(result.rows);
@@ -148,16 +178,25 @@ export const getAllJournals = async (req: Request, res: Response): Promise<void>
       res.status(404).json({ message: "No journals found" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error });
+    console.error("Error fetching journals or interacting with Redis", error);
+    res.status(500).json({ message: "Server error", error });
   }
 };
 
-
 export const getPersonalJournals = async (req: Request, res: Response): Promise<void> => {
-  const { user_id } = req.params; // Extract the user ID from the route parameter
+  const { user_id } = req.params;
+  const cacheKey = `personal_journals:${user_id}`;
 
   try {
-    // Query to get all journals for the specific user
+
+    const cachedData = await client.get(cacheKey);
+    if (cachedData) {
+      console.log("Returning cached personal journals");
+      res.json(JSON.parse(cachedData));
+      return;
+    }
+
+
     const query = `
       SELECT id, text, time, wave, wave_direction, wind_direction, location, image, user_id, created_at, updated_at
       FROM journal
@@ -166,16 +205,19 @@ export const getPersonalJournals = async (req: Request, res: Response): Promise<
     `;
     const result = await db.query(query, [user_id]);
 
-    // Respond with the journals or a message if no journals are found
+
     if (result.rows.length > 0) {
+      await client.set(cacheKey, JSON.stringify(result.rows), {
+        EX: 3600,
+      });
       res.status(200).json(result.rows);
     } else {
       res.status(404).json({ message: 'No journals found for this user' });
     }
   } catch (err) {
-    let error = err as Error
+    console.error("Error fetching personal journals or interacting with Redis", err);
+    let error = err as Error;
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
-
 

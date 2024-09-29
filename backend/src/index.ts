@@ -4,7 +4,7 @@ dotenv.config();
 import cors from 'cors';
 
 // reports cron job
-import './jobs/cronJob';
+//import './jobs/cronJob';
 
 const app = express();
 const port = process.env.PORT || 5000;

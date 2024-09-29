@@ -3,6 +3,20 @@ import { db } from '../db';
 import { User } from '../models/user';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import redis, { createClient } from 'redis';
+
+const client = createClient({
+  password: process.env.REDIS_PASSWORD,
+  socket: {
+    host: process.env.REDIS_HOST,
+    port: Number(process.env.REDIS_PORT),
+  },
+});
+
+// Connect Redis client
+client.connect().catch((err) => {
+  console.error("Failed to connect to Redis", err);
+});
 
 const generateToken = (id: number) => {
   return jwt.sign({ id }, process.env.JWT_SECRET!, { expiresIn: '30d' });
@@ -160,15 +174,25 @@ export const deleteUser = async (req: Request, res: Response): Promise<void> => 
 };
 
 export const getAllUsers = async (req: Request, res: Response): Promise<void> => {
+  const cacheKey = "all_users";
+
   try {
 
+    const cachedData = await client.get(cacheKey);
+    if (cachedData) {
+      console.log("Returning cached user data");
+      res.status(200).json(JSON.parse(cachedData));
+      return;
+    }
 
-    const result = await db.query('SELECT id, username, email,password, role FROM users');
 
-
+    const result = await db.query('SELECT id, username, email, password, role FROM users');
 
 
     if (result.rows.length > 0) {
+      await client.set(cacheKey, JSON.stringify(result.rows), {
+        EX: 3600,
+      });
       res.status(200).json(result.rows);
     } else {
       res.status(404).json({ message: "No users found" });
@@ -180,3 +204,98 @@ export const getAllUsers = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
+
+export const selectPreferences = async (req: Request, res: Response): Promise<void> => {
+  const userId = req.params.id;
+  const {
+    preferred_wave_min,
+    preferred_wave_max,
+    preferred_wave_direction,
+    preferred_wind_direction,
+    preferred_location
+  } = req.body;
+
+  // Validate input
+  if (!preferred_wave_min || !preferred_wave_max || !preferred_wave_direction || !preferred_wind_direction || !preferred_location) {
+    res.status(400).json({ message: 'Please provide all preferences' });
+    return;
+  }
+
+  try {
+
+    const existingPreferences = await db.query('SELECT * FROM user_preferences WHERE user_id = $1', [userId]);
+
+    if (existingPreferences.rows.length > 0) {
+      // Update the user's preferences
+      const updateQuery = `
+        UPDATE user_preferences
+        SET preferred_wave_min = $1, preferred_wave_max = $2, preferred_wave_direction = $3,
+            preferred_wind_direction = $4, preferred_location = $5, updated_at = NOW()
+        WHERE user_id = $6
+        RETURNING *;
+      `;
+      const updatedPreferences = await db.query(updateQuery, [
+        preferred_wave_min,
+        preferred_wave_max,
+        preferred_wave_direction,
+        preferred_wind_direction,
+        preferred_location,
+        userId
+      ]);
+
+      res.status(200).json({
+        message: 'Preferences updated successfully',
+        preferences: updatedPreferences.rows[0]
+      });
+    } else {
+      // Insert new preferences for the user
+      const insertQuery = `
+        INSERT INTO user_preferences (user_id, preferred_wave_min, preferred_wave_max, preferred_wave_direction, preferred_wind_direction, preferred_location)
+        VALUES ($1, $2, $3, $4, $5, $6)
+        RETURNING *;
+      `;
+      const newPreferences = await db.query(insertQuery, [
+        userId,
+        preferred_wave_min,
+        preferred_wave_max,
+        preferred_wave_direction,
+        preferred_wind_direction,
+        preferred_location
+      ]);
+
+      res.status(201).json({
+        message: 'Preferences saved successfully',
+        preferences: newPreferences.rows[0]
+      });
+    }
+  } catch (err) {
+    let error = err as Error;
+    console.error('Error saving preferences:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+
+export const getAllUserPreferences = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const query = `
+      SELECT u.id AS user_id, u.username, u.email, p.preferred_wave_min, p.preferred_wave_max, 
+             p.preferred_wave_direction, p.preferred_wind_direction, p.preferred_location, 
+             p.created_at, p.updated_at
+      FROM user_preferences p
+      JOIN users u ON p.user_id = u.id;
+    `;
+
+    const result = await db.query(query);
+
+    if (result.rows.length > 0) {
+      res.status(200).json(result.rows);
+    } else {
+      res.status(404).json({ message: 'No user preferences found' });
+    }
+  } catch (err) {
+    let error = err as Error;
+    console.error('Error saving preferences:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};

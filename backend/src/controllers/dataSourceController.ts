@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
 import redis, { createClient } from 'redis';
+import { Swell, SwellEntry, MappedSwellData } from "../models/datasource"
 
 // Redis Client Setup
 const client = createClient({
@@ -16,26 +17,7 @@ client.connect().catch(console.error);
 // Surfline API URL
 const SURFLINE_API_URL = "https://services.surfline.com/kbyg/spots/forecasts/swells";
 
-// Interface for Swell Data
-interface Swell {
-  height: number;
-  direction: number;
-  power: number;
-  period: number;
-}
 
-interface SwellEntry {
-  timestamp: number;
-  swells: Swell[];
-}
-
-interface MappedSwellData {
-  timestamp: number;
-  waveHeight: number[];
-  waveDirection: number[];
-  wavePower: number[];
-  swellPeriod: number[];
-}
 
 // Get Swell Data for Koel Bay
 export const getKoelBay = async (req: Request, res: Response): Promise<void> => {

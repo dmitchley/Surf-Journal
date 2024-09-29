@@ -9,7 +9,7 @@ A web application for tracking and journaling daily surf reports, built with a P
 - **Backend**: Node.js, Express.js, PostgreSQL, Sequelize ORM, TypeScript
 - **Frontend**: Next.js, React.js, Tailwind CSS
 - **Authentication**: JWT (JSON Web Tokens)
-- **Caching**: Redis (optional)
+- **Caching**: Redis  
 - **Database**: PostgreSQL
 - **Cron Jobs**: `node-cron` for daily surf report fetching and data cleanup
 

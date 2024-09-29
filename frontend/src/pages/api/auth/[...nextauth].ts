@@ -14,7 +14,7 @@ export default NextAuth({
         if (!credentials) {
           return null;
         }
-        const res = await fetch('https://surf-journal.onrender.com/api/user/login', {
+        const res = await fetch('http://localhost:5000/api/user/login', {
           method: 'POST',
           body: JSON.stringify({
             email: credentials.email,
