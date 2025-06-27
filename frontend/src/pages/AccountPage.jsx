@@ -39,7 +39,7 @@ export default function JournalDetail() {
   const getPersonalJournals = async () => {
     await axios
       .get(
-        "https://surf-journal-backend.onrender.com/api/journals/myJournals",
+        "http://localhost:5000/api/journals/myJournals",
         {
           // get the token from local storage and authorize the user with the token
           headers: {
@@ -61,7 +61,7 @@ export default function JournalDetail() {
 
   const getUsers = async () => {
     await axios
-      .get("https://surf-journal-backend.onrender.com/api/user/", {
+      .get("http://localhost:5000/api/user/", {
         // get the token from local storage and authorize the user with the token
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -89,7 +89,7 @@ export default function JournalDetail() {
 
   const getAllJournals = async () => {
     await axios
-      .get("https://surf-journal-backend.onrender.com/api/journals", {
+      .get("http://localhost:5000/api/journals", {
         // get the token from local storage and authorize the user with the token
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -109,7 +109,7 @@ export default function JournalDetail() {
 
   const DeleteUser = (User) => {
     axios
-      .delete(`https://surf-journal-backend.onrender.com/api/user/${User}`, {
+      .delete(`http://localhost:5000/api/user/${User}`, {
         // get the token from local storage and authorize the user with the token
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -128,7 +128,7 @@ export default function JournalDetail() {
   const DeleteJournal = (Journal) => {
     axios
       .delete(
-        `https://surf-journal-backend.onrender.com/api/journals/${Journal}`,
+        `http://localhost:5000/api/journals/${Journal}`,
         {
           // get the token from local storage and authorize the user with the token
           headers: {

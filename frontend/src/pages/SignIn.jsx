@@ -58,6 +58,7 @@ export default function Signin() {
         window.location.href = "/";
       })
       .catch(function (err) {
+        console.error('the error is: '+ err)
         console.log(err), setErrorBanner(true);
       });
 
