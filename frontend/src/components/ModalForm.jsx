@@ -27,7 +27,7 @@ export default function ModalForm({ open, setOpen, journal }) {
     console.log("Notes 👉️", Payload);
 
     axios
-      .post("https://surf-journal-backend.onrender.com/api/journals", Payload)
+      .post("http://localhost:5000/api/journals", Payload)
       .then((response) => {
         console.log(response.data), (window.location.href = "/journal");
       })

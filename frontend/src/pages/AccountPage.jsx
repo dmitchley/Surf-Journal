@@ -18,7 +18,7 @@ export default function JournalDetail() {
 
   const getPersonalData = async () => {
     await axios
-      .get("https://surf-journal-backend.onrender.com/api/user/me", {
+      .get("http://localhost:5000/api/user/me", {
         // get the token from local storage and authorize the user with the token
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

@@ -18,7 +18,7 @@ export default function JournalDetail() {
   const getData = async () => {
     await axios
       .get(
-        `https://surf-journal-backend.onrender.com/api/journals/${id.slice(1)}`
+        `http://localhost:5000/api/journals/${id.slice(1)}`
       )
       .then(function (response) {
         setspecificJournal(response.data.journal);
@@ -42,7 +42,7 @@ export default function JournalDetail() {
 
     await axios
       .put(
-        `https://surf-journal-backend.onrender.com/api/journals/comment/${id.slice(
+        `http://localhost:5000/api/journals/comment/${id.slice(
           1
         )}`,
         CommentPayload
