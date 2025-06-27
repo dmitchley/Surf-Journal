@@ -9,7 +9,7 @@ function KoelBayTable() {
   const [journal, setJournal] = useState("");
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-
+//
   const getData = async () => {
     try {
       setLoading(true);
